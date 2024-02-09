@@ -104,7 +104,7 @@ class MainWindow(QMainWindow):
     def update_table(self, path):
         if os.path.isfile(path):
             file_name = os.path.basename(path)
-            file_hash = self.calculate_hash(path)
+            file_hash = calculate_hash(path)
 
             row_position = self.table_widget.rowCount()
             self.table_widget.insertRow(row_position)
@@ -115,22 +115,13 @@ class MainWindow(QMainWindow):
             for root, dirs, files in os.walk(path):
                 for file_name in files:
                     full_path = os.path.join(root, file_name)
-                    file_hash = self.calculate_hash(full_path)
+                    file_hash = calculate_hash(full_path)
 
                     row_position = self.table_widget.rowCount()
                     self.table_widget.insertRow(row_position)
                     self.table_widget.setItem(row_position, 0, QTableWidgetItem(file_name))
                     self.table_widget.setItem(row_position, 1, QTableWidgetItem(file_hash))
                     self.table_widget.setItem(row_position, 2, QTableWidgetItem(full_path))
-
-    def calculate_hash(self, file_path):
-        hasher = hashlib.md5()
-
-        with open(file_path, "rb") as file:
-            buffer = file.read()
-            hasher.update(buffer)
-
-        return hasher.hexdigest()
 
     def center_window(self):
         qr = self.frameGeometry()
